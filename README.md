@@ -2,4 +2,4 @@
 
 Coming Soon!
 
-For futher info: yosi.shrem1@gmail.com
+For further info: yosi.shrem1@gmail.com
