@@ -61,7 +61,7 @@ If you encounter any problem, please check the ```log.txt```.
 
 ## How to use:
 
-- Place your ```.wav``` files in the ```./data/raw/ ``` directory. \
+- Place your ```.wav``` files in the ```./data/raw/ ``` directory. Each file should contain a single word. \
 Note:You can also place directories that contain the ```.wav``` files, the is no need to re-arrange your data for example:
     ```
     ./data/raw
