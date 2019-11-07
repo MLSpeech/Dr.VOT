@@ -31,6 +31,8 @@ If you find our work useful please cite :
 
 ## Installation instructions
 
+- Python 3.6+
+
 - Download the code:
     ```
     git clone https://github.com/MLSpeech/Dr.VOT.git
