@@ -2,7 +2,9 @@ __author__ = 'YosiShrem'
 try:
     import os
     import subprocess
-
+    import sys
+    if not (sys.version_info[0]>=3 and sys.version_info[1]>=6):
+        raise SystemExit("[ERROR] support Python 3.6+, your version is {}".format('.'.join([str(i) for i in sys.version_info])))
     # praat
     if os.popen('uname -a').read().lower().__contains__("darwin"):
         if not os.path.exists("/Applications/Praat.app"):
