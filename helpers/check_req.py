@@ -14,7 +14,7 @@ try:
 
     elif os.popen('uname -a').read().lower().__contains__("linux"):
         if not os.path.exists(os.path.join(os.getcwd(), "linux_praat")):
-            raise SystemExit(f"Couldn't find Praat at :{os.path.join(os.getcwd(), 'linux_praat')}")
+            raise SystemExit("Couldn\'t find Praat at :{}".format(os.path.join(os.getcwd(), 'linux_praat')))
     else:
         raise SystemExit("Unsupported Operating System, support only MacOS & Linux")
     # sox
