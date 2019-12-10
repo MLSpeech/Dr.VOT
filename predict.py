@@ -29,6 +29,7 @@ DEBUG_MAX_SAMPLES = 20
 
 
 def create_tg_simple(path, window_length, window_offset, pred,length):
+    window_offset = round(window_offset,3)
     textgrid = tg.TextGrid()
     window_tier = tg.IntervalTier("Window")
     window_tier.add(window_offset, window_offset + window_length * 0.001, "window")
@@ -220,7 +221,7 @@ def get_durations(durations_fname):
     with open(durations_fname, 'r') as f:
         for line in f:
             k,_,v = line.strip().split(':') #fullpath,windows_starts,duration
-            durations[os.path.basename(k.strip()).split('.')[0]] = float(v)
+            durations[os.path.basename(k.strip()).split('.')[0]] = round(float(v),3)
     return durations
 
 parser = argparse.ArgumentParser(description='VOT segmentor Predictor')
