@@ -28,18 +28,19 @@ MARGIN = 1
 DEBUG_MAX_SAMPLES = 20
 
 
-def create_tg_simple(path, window_length, window_offset, pred):
+def create_tg_simple(path, window_length, window_offset, pred,length):
     textgrid = tg.TextGrid()
     window_tier = tg.IntervalTier("Window")
     window_tier.add(window_offset, window_offset + window_length * 0.001, "window")
-    window_tier.add(window_offset + window_length * 0.001, window_offset + window_length * 0.001 + MARGIN, " ")
+    window_tier.add(window_offset + window_length * 0.001, length-0.001, " ")
+    # window_tier.add(window_offset + window_length * 0.001, window_offset + window_length * 0.001 + MARGIN, " ")
     textgrid.append(window_tier)
 
     vot_onset, vot_offset, pred_type = pred
     vot_tier = tg.IntervalTier("VOT")
-    # word frame is larger so create some margin- 10% . the model isnt effected by this tier
     vot_tier.add(window_offset + vot_onset * 0.001, window_offset + vot_offset * 0.001, pred_type)
-    vot_tier.add(window_offset + vot_offset * 0.001, window_offset + vot_offset * 0.001 + MARGIN, "")
+    vot_tier.add(window_offset + vot_offset * 0.001, length-0.001, "")
+    # vot_tier.add(window_offset + vot_offset * 0.001, window_offset + vot_offset * 0.001 + MARGIN, "")
     textgrid.append(vot_tier)
 
     predicted_type = "POS" if POS_STRING == pred_type else "NEG"
@@ -152,7 +153,7 @@ def basic_predict(model, structured, device, data_loader, debug=False):
     return filenames, pred_vots
 
 
-def write_predictions(filenames, pos_vots, neg_vots, pred_vots, basic_preds, out_dir):
+def write_predictions(filenames, pos_vots, neg_vots, pred_vots, basic_preds, out_dir,durations):
     """
     output TextGrids and CSV with all the data
     :param filenames:
@@ -162,14 +163,16 @@ def write_predictions(filenames, pos_vots, neg_vots, pred_vots, basic_preds, out
     :param out_dir:
     :return:
     """
+    durations=  get_durations(durations)
     predictions = {}
+
     base_out_tg = "{}_pred.TextGrid"
     for idx in range(len(filenames)):
         filename, window_offset, window_length,labeled_vot,labeled_type = filenames[idx]
         out_tg = base_out_tg.format(os.path.join(out_dir, filename))
         # create_tg(out_tg, window_length, window_offset, [pos_vots[idx], neg_vots[idx], pred_vots[idx]],
         #           basic_preds[idx],labeled_vot,labeled_type)#TODO- basic
-        create_tg_simple(out_tg, window_length, window_offset,pred_vots[idx])
+        create_tg_simple(out_tg, window_length, window_offset,pred_vots[idx],length= durations[filename])
     print("Predictions can be found at : [{}]".format(out_dir))
 
 def write_csv(summary_path,filenames, preds_vots):
@@ -209,8 +212,16 @@ def get_model(path, basic=False):
 
     return model, structured, tagger
 
+def get_durations(durations_fname):
+    #create dict of {file:duration} for matching textgrids
+    print(f"reading <{durations_fname}> to get the duration of each file to match the generated textgrid...")
+    durations = {}
 
-# TODO add +1 to prediction to convert index to time frame and then add the offset form the labels file
+    with open(durations_fname, 'r') as f:
+        for line in f:
+            k,_,v = line.strip().split(':') #fullpath,windows_starts,duration
+            durations[os.path.basename(k.strip()).split('.')[0]] = float(v)
+    return durations
 
 parser = argparse.ArgumentParser(description='VOT segmentor Predictor')
 
@@ -219,9 +230,12 @@ parser.add_argument('--load', default="final_models/adv_model.", help='laod mode
 parser.add_argument('--inference', default="features/", type=str, help='path to inference dir')
 parser.add_argument('--out_dir', default="out_textgrids/", type=str, help='path to output dir for textgrids')
 parser.add_argument('--debug', action='store_true', help='predict only 20 examples for short run-time')
+parser.add_argument('--durations',type=str, default=None,required=True, help='path for voice_starts.txt that contains the duration of each file')
 
 args = parser.parse_args()
 try:
+    assert os.path.exists(args.durations), f"Couldn't find {args.durations}"
+
     if not args.load:
         assert False, "must load a model"
 
@@ -240,7 +254,7 @@ try:
     filenames, pos_vots, neg_vots, pred_vots = predict(model, structured, tagger, device, test_loader, args.debug)
     # basic_filenames, basic_pred_vots = basic_predict(basic_model, basic_structured, device, test_loader, args.debug)# TODO- basic
     # write_predictions(filenames, pos_vots, neg_vots, pred_vots, basic_pred_vots, args.out_dir or args.inference)#TODO- basic
-    write_predictions(filenames, pos_vots, neg_vots, pred_vots, None, args.out_dir or args.inference)
+    write_predictions(filenames, pos_vots, neg_vots, pred_vots, None, args.out_dir or args.inference,durations= args.durations)
     write_csv(os.path.join(args.out_dir,"summary.csv"),filenames,pred_vots)
 
 except Exception as e:

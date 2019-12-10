@@ -51,7 +51,8 @@ fi
 echo "============"
 echo "Step 3: Running Dr.VOT"
 echo "============"
-pipenv run python predict.py --inference ./data/processed/ --out_dir ./data/out_tg/tmp
+
+pipenv run python predict.py --inference ./data/processed/ --out_dir ./data/out_tg/tmp --durations ./data/raw/all_files/voice_starts.txt
 if [ $? -eq 1 ]; then
     echo "Failed to run Dr.VOT system, check log.txt"
     F_cleanup

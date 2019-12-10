@@ -1,5 +1,5 @@
 filename, type, duration(msec)
-dir2/1.wav,POS_VOT,23
+dir2/1.wav,POS_VOT,22
 dir2/3.wav,POS_VOT,44
 dir2/2.wav,POS_VOT,103
 dir1/1.wav,NEG_VOT,60
