@@ -5,7 +5,7 @@ Joseph Keshet (joseph.keshet@biu.ac.il)
 
              
 
-Dr.VOT is an a software package for automatic measurement of voice onset time (VOT).
+Dr.VOT is a software package for automatic measurement of voice onset time (VOT).
 We propose a neural-based architecture composed of a recurrent neural network(RNN) and a structured prediction model. Dr.VOT can handle both positive and negative VOTs and is robust to variations across annotators.
 
 This is a beta version of Dr.VOT. Any reports of bugs, comments on how to improve the software or documentation, or questions are greatly appreciated, and should be sent to the authors at the addresses given above.
