@@ -1,12 +1,14 @@
+-i https://pypi.org/simple/
 boltons==19.1.0
 boto==2.49.0
 certifi==2019.9.11
 chardet==3.0.4
 decorator==4.4.0
+future==0.18.2
 idna==2.8
 ipython-genutils==0.2.0
 numpy==1.16.5
-Pillow==6.2.0
+pillow==8.2.0
 praatio==3.7.1
 requests==2.22.0
 six==1.12.0

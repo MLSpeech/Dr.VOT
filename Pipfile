@@ -24,7 +24,7 @@ traitlets = "==4.3.2"
 unicodecsv = "==0.14.1"
 urllib3 = "==1.24.2"
 ipython_genutils = "==0.2.0"
-Pillow = "==6.2.0"
+Pillow = "==8.2.0"
 
 [requires]
 #python_version = "3.7"
