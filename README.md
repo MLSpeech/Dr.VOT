@@ -1,6 +1,6 @@
 # Dr.VOT : Measuring Positive and Negative Voice Onset Time in the Wild 
 
-Yosi Shrem (yosi.shrem@biu.ac.il)\
+Yosi Shrem (joseph.shrem@campus.technion.ac.il)\
 Joseph Keshet (joseph.keshet@biu.ac.il)             
 
              
