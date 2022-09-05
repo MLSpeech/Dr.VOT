@@ -31,7 +31,7 @@ If you find our work useful please cite :
 
 ## Installation instructions
 
-- Python 3.6+
+- Python 3.7+
 
 - Download the code:
     ```
